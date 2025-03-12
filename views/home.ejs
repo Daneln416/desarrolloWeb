@@ -1,29 +1,154 @@
 <%- include('partials/header'); -%>
 
-    <div style="background-color: rgb(31, 31, 31); padding: 50px 0px 50px 0px; color: white; text-align: center;">
-        <h1>Mi blog</h1>
-        <p class="mb-5" >Aquí encontrarás todas mis entradas</p>
+<div style="background-color: rgb(31, 31, 31); padding: 50px 0px 50px 0px; color: white; text-align: center;">
+    <h1>Personajes de Star Wars</h1>
+    <p class="mb-5">Descubre información sobre los personajes de la saga</p>
+</div>
+
+<div class="container">
+    <!-- Formulario de filtrado -->
+    <div class="filtros mt-4">
+        <form action="/" method="GET">
+            <div class="row">
+                <div class="col-md-5">
+                    <label for="planeta">Filtrar por planeta:</label>
+                    <select name="planeta" id="planeta" class="form-control">
+                        <option value="">Todos los planetas</option>
+                        <% planetas.forEach(planeta => { %>
+                            <option value="<%= planeta %>" <%= planetaSeleccionado === planeta ? 'selected' : '' %>><%= planeta %></option>
+                        <% }); %>
+                    </select>
+                </div>
+                
+                <div class="col-md-5">
+                    <label for="especie">Filtrar por especie:</label>
+                    <select name="especie" id="especie" class="form-control">
+                        <option value="">Todas las especies</option>
+                        <% especies.forEach(especie => { %>
+                            <option value="<%= especie %>" <%= especieSeleccionada === especie ? 'selected' : '' %>><%= especie %></option>
+                        <% }); %>
+                    </select>
+                </div>
+                
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary">Filtrar</button>
+                </div>
+            </div>
+        </form>
     </div>
 
-    <div class="container" >
-        <%for(let i =0; i < todasEntradas.length; i++){  %>
-            <%let posActual = todasEntradas[i];  %>
-            <!-- POSICION BOCETO -->
-            <h5 style="margin-top: 50px !important;"  ><%=posActual.fecha%>.</h5>
-            <h2><%=posActual.titulo%>.</h2>
-            <p ><%=posActual.contenido.substring(0,150)%>...</p>
-            <a target="_blank" href="entradas/<%=posActual.url%>">Leer más</a>
-            
-            <!-- POSICION BOCETO -->
-        <%}%>
+    <div class="table-responsive mt-4">
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Altura</th>
+                    <th>Peso</th>
+                    <th>Color de pelo</th>
+                    <th>Color de piel</th>
+                    <th>Color de ojos</th>
+                    <th>Año de nacimiento</th>
+                    <th>Género</th>
+                    <th>Planeta</th>
+                    <th>Especie</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% 
+                let personajesFiltrados = personajes;
+                
+                if (planetaSeleccionado) {
+                    personajesFiltrados = personajesFiltrados.filter(p => p.homeworld === planetaSeleccionado);
+                }
+                
+                if (especieSeleccionada) {
+                    personajesFiltrados = personajesFiltrados.filter(p => p.species === especieSeleccionada);
+                }
+                
+                personajesFiltrados.forEach(personaje => { 
+                %>
+                    <tr>
+                        <tr>
+                            <td><%= personaje.name %></td>
+                            
+                            <td>
+                                <% if (personaje.height !== "NA") { %>
+                                    <%= personaje.height %>
+                                <% } else { %>
+                                    Desconocido
+                                <% } %>
+                            </td>
+                        
+                            <td>
+                                <% if (personaje.mass !== "NA") { %>
+                                    <%= personaje.mass %>
+                                <% } else { %>
+                                    Desconocido
+                                <% } %>
+                            </td>
+                        
+                            <td>
+                                <% if (personaje.hair_color !== "NA") { %>
+                                    <%= personaje.hair_color %>
+                                <% } else { %>
+                                    N/A
+                                <% } %>
+                            </td>
+                        
+                            <td>
+                                <% if (personaje.skin_color !== "NA") { %>
+                                    <%= personaje.skin_color %>
+                                <% } else { %>
+                                    N/A
+                                <% } %>
+                            </td>
+                        
+                            <td>
+                                <% if (personaje.eye_color !== "NA") { %>
+                                    <%= personaje.eye_color %>
+                                <% } else { %>
+                                    N/A
+                                <% } %>
+                            </td>
+                        
+                            <td>
+                                <% if (personaje.birth_year !== "NA") { %>
+                                    <%= personaje.birth_year %>
+                                <% } else { %>
+                                    Desconocido
+                                <% } %>
+                            </td>
+                        
+                            <td>
+                                <% if (personaje.gender !== "NA") { %>
+                                    <%= personaje.gender %>
+                                <% } else { %>
+                                    N/A
+                                <% } %>
+                            </td>
+                        
+                            <td>
+                                <% if (personaje.homeworld !== "NA") { %>
+                                    <%= personaje.homeworld %>
+                                <% } else { %>
+                                    Desconocido
+                                <% } %>
+                            </td>
+                        
+                            <td>
+                                <% if (personaje.species !== "NA") { %>
+                                    <%= personaje.species %>
+                                <% } else { %>
+                                    Desconocido
+                                <% } %>
+                            </td>
+                        </tr>
+                        
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
     </div>
-
-    <!-- BOTÓN SUSCRIBIR -->
-    <div class="container mt-5">
-        <a class="btn btn-primary" style="width: 100%;"  href="/suscribir" role="button">Suscribirme</a>
-    </div>
-    
-
-
+</div>
 
 <%- include('partials/footer'); -%>
